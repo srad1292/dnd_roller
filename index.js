@@ -4,7 +4,8 @@ let modifier = 0;
 
 function rollDice(formElement) {
     this.getFormValues(formElement);
-    this.performRoll();
+    const roll = this.performRoll();
+    this.printResults(roll);
 }
 
 function getFormValues(formElement) {
@@ -24,10 +25,27 @@ function performRoll() {
     }
     sum += this.modifier;
     console.log({results, sum});
+    return {results, sum};
 }
 
 function rollSingleDice() {
     return Math.ceil(Math.random() * this.die);
+}
+
+function printResults(roll) {
+    let lines = [`Rolling D${this.die}...`];
+    for(let result of roll.results) {
+        lines.push(`Rolled: ${result}`);
+    }
+
+    if(modifier) {
+        lines.push(`Adding Modifier of ${this.modifier}`);
+    }
+
+    lines.push(`Total for this roll is: ${roll.sum}`);
+
+    const text = lines.join("\n");
+    document.getElementById('roll-log').innerHTML = text;
 }
 
 
