@@ -1,0 +1,31 @@
+label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+select {
+    width: 100%;
+}
+
+input[type="submit"] {
+    margin-top: 1.5rem;
+    width: 10rem;
+
+    border-radius: 5px;
+    border-style: none;
+    FONT-WEIGHT: 600;
+    font-size: 1.1rem;
+    background-color: #83b865;
+}
+
+.flex-form {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.form-element {
+    width: 10rem;
+    margin-right: 2rem;
+}
