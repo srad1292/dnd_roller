@@ -13,6 +13,15 @@
     <form onsubmit="rollDice(this); return false">
         <div class="flex-form">
             <div class="form-element">
+                <label for="typeOfRoll">Type of Roll: </label>
+                <select id="typeOfRoll" name="typeOfRoll" required>
+                    <option value="regular">Regular</option>
+                    <option value="advantage">Advantage</option>
+                    <option value="disadvantage">Disadvantage</option>
+                </select>
+            </div>
+
+            <div class="form-element">
                 <label for="typeOfDie">Type of Die: </label>
                 <select id="typeOfDie" name="typeOfDie" required>
                     <option value="4">D4</option>
