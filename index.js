@@ -148,12 +148,29 @@ function resetForm() {
     this.extraDiceCounters = [];
     this.extraDiceValues = [];
 
-    // this.typeOfRoll = 'regular';
-    // this.basicRoll = {
-    //     die: 4,
-    //     rolls: 1,
-    //     modifier: 0
-    // };
+    let typeOfRollElement = document.getElementById('typeOfRoll');
+    typeOfRollElement.value = 'regular';
+    this.typeOfRoll = 'regular';
+
+    let nat20AttackElement = document.getElementById('nat20Attack');
+    nat20AttackElement.value = 'no';
+    this.nat20Attack = false;
+
+    let typeOfDieElement = document.getElementById('typeOfDie');
+    typeOfDieElement.value = '4';
+
+    let numberOfRollsElement = document.getElementById('numberOfRolls');
+    numberOfRollsElement.value = null;
+
+    let modifierElement = document.getElementById('modifier');
+    modifierElement.value = null;
+    
+
+    this.basicRoll = {
+        die: 4,
+        rolls: 1,
+        modifier: 0
+    };
 
 }
 
