@@ -20,7 +20,9 @@
                     <option value="disadvantage">Disadvantage</option>
                 </select>
             </div>
-
+        </div>
+        
+        <div class="flex-form">
             <div class="form-element">
                 <label for="typeOfDie">Type of Die: </label>
                 <select id="typeOfDie" name="typeOfDie" required>
@@ -45,7 +47,15 @@
             </div>
         </div>
 
+        <div id="additional-dice-container"></div>
+
+        <div class="flex-form">
+            <button class="form-element" type="button" onclick="addDiceRow()">Add Dice To Roll</button>
+        </div>
+
         <input type="submit" value="Roll">
+
+        <button type="button" onclick="resetForm()">Reset Form</button>
     </form>
 
     <div class="log-container">
