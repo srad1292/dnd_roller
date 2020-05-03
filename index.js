@@ -3,6 +3,7 @@ this.rolls = 1;
 this.modifier = 0;
 this.typeOfRoll = 'regular';
 this.counter = 0;
+this.extraDiceCounters = [];
 
 function rollDice(formElement) {
     console.log("dice: ", this.die);
@@ -99,6 +100,7 @@ function addDiceRow(){
 function addContainer() {
     console.log("counter A: ", this.counter);
     this.counter++;
+    this.extraDiceCounters.push(this.counter);
     console.log("counter: ", this.counter);
     let newContainer = document.createElement('div');
     newContainer.classList.add('flex-form');
@@ -163,11 +165,14 @@ function addModifierInput() {
 
 function addRemoveButton() { 
     const container = this.addNewElementContainer();
+    
     container.classList.add('remove-button-container');
     let removeButton = document.createElement('button');
     removeButton.setAttribute('type', 'button');
     removeButton.innerText ="Remove";
 
+    const thisIndex = this.counter;
+    removeButton.addEventListener('click', () => {this.removeDiceRow(thisIndex)});
     container.appendChild(removeButton);
 }
 
@@ -176,4 +181,12 @@ function addNewElementContainer() {
     newContainer.classList.add('form-element');
     document.getElementById(`dice-row-${this.counter}`).appendChild(newContainer);
     return newContainer;
+}
+
+function removeDiceRow(counter) {
+    const index = this.extraDiceCounters.findIndex(item => item === counter);
+    this.extraDiceCounters.splice(index, 1);
+
+    const rowToRemove = document.getElementById(`dice-row-${counter}`);
+    rowToRemove.remove();
 }
