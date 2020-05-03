@@ -11,6 +11,8 @@ this.extraDiceCounters = [];
 
 this.extraDiceValues = [];
 
+this.isNat20Attack = false;
+
 function rollDice(formElement) {
     // console.log("dice: ", this.die);
     console.log({formElement});
@@ -22,16 +24,17 @@ function rollDice(formElement) {
 }
 
 function getFormValues(formElement) {
+    this.isNat20Attack = formElement.nat20Attack.value === 'yes';
+    
     this.basicRoll.die = parseInt(formElement.typeOfDie.value);
-    this.basicRoll.rolls = parseInt(formElement.numberOfRolls.value);
+    this.basicRoll.rolls = this.isNat20Attack ? 2*parseInt(formElement.numberOfRolls.value) : parseInt(formElement.numberOfRolls.value);
     this.basicRoll.modifier = formElement.modifier.value ? parseInt(formElement.modifier.value) : 0;
     this.typeOfRoll = formElement.typeOfRoll.value;
-
     if(this.extraDiceCounters.length > 0) {
         extraDiceCounters.forEach(counter => {
             const extraDice = {
                 die: parseInt(formElement[`typeOfDie${counter}`].value),
-                rolls: parseInt(formElement[`numberOfRolls${counter}`].value),
+                rolls: this.isNat20Attack ? 2*parseInt(formElement[`numberOfRolls${counter}`].value) : parseInt(formElement[`numberOfRolls${counter}`].value),
                 modifier: formElement[`modifier${counter}`].value ? parseInt(formElement[`modifier${counter}`].value) : 0 
             };
             this.extraDiceValues.push(extraDice);
@@ -84,6 +87,10 @@ function printResults(rollGroups) {
     let lines = [];
     console.log({rollGroups});
     try {
+        if(this.isNat20Attack) {
+            lines.push('Doubling dice for natural 20 attack');
+            lines.push('');
+        }
         rollGroups.forEach(rolls => {
             let groupSum = 0;
             rolls.forEach(roll => {
@@ -119,7 +126,8 @@ function printResults(rollGroups) {
         const text = lines.join("\n");
         document.getElementById('roll-log').innerHTML = text;
     } catch(error) {
-        console.log(error);
+        console.log("printResults error");
+        console.log({error});
     }
 }
 
