@@ -14,10 +14,8 @@ this.extraDiceValues = [];
 this.isNat20Attack = false;
 
 function rollDice(formElement) {
-    // console.log("dice: ", this.die);
-    console.log({formElement});
+    // console.log({formElement});
     this.getFormValues(formElement);
-    console.log({basic: this.basicRoll, extra: this.extraDiceValues});
     
     const rollGroups = this.getRollValues();
     this.printResults(rollGroups);
@@ -74,7 +72,7 @@ function performRoll(dice) {
         sum += result;
     }
     sum += dice.modifier;
-    console.log({results, sum});
+    // console.log({results, sum});
     return {...dice, results, sum};
 }
 
@@ -85,7 +83,7 @@ function rollSingleDice(dice) {
 function printResults(rollGroups) {
     let sums = [];
     let lines = [];
-    console.log({rollGroups});
+    // console.log({rollGroups});
     try {
         if(this.isNat20Attack) {
             lines.push('Doubling dice for natural 20 attack');
@@ -189,10 +187,8 @@ function addDiceRow(){
 
 
 function addContainer() {
-    console.log("counter A: ", this.counter);
     this.counter++;
     this.extraDiceCounters.push(this.counter);
-    console.log("counter: ", this.counter);
     let newContainer = document.createElement('div');
     newContainer.classList.add('flex-form');
     newContainer.setAttribute('id', `dice-row-${this.counter}`);
@@ -275,7 +271,6 @@ function addNewElementContainer() {
 
 function removeDiceRow(counter) {
     const index = this.extraDiceCounters.findIndex(item => item === counter);
-    console.log({counter, index});
     this.extraDiceCounters.splice(index, 1);
 
     const rowToRemove = document.getElementById(`dice-row-${counter}`);
