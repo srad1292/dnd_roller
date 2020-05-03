@@ -140,12 +140,12 @@ function resetForm() {
     this.extraDiceCounters = [];
     this.extraDiceValues = [];
 
-    this.typeOfRoll = 'regular';
-    this.basicRoll = {
-        die: 4,
-        rolls: 1,
-        modifier: 0
-    };
+    // this.typeOfRoll = 'regular';
+    // this.basicRoll = {
+    //     die: 4,
+    //     rolls: 1,
+    //     modifier: 0
+    // };
 
 }
 
