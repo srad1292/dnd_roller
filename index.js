@@ -1,87 +1,153 @@
-this.die = 4;
-this.rolls = 1;
-this.modifier = 0;
 this.typeOfRoll = 'regular';
+this.basicRoll = {
+    die: 4,
+    rolls: 1,
+    modifier: 0
+};
+
 this.counter = 0;
+
 this.extraDiceCounters = [];
 
+this.extraDiceValues = [];
+
 function rollDice(formElement) {
-    console.log("dice: ", this.die);
+    // console.log("dice: ", this.die);
     console.log({formElement});
     this.getFormValues(formElement);
-    const rolls = [];
-    rolls.push(this.performRoll());
-    if(this.typeOfRoll === 'advantage' || this.typeOfRoll === 'disadvantage') {
-        rolls.push(this.performRoll());
-    }
-    this.printResults(rolls);
+    console.log({basic: this.basicRoll, extra: this.extraDiceValues});
+    
+    const rollGroups = this.getRollValues();
+    this.printResults(rollGroups);
 }
 
 function getFormValues(formElement) {
-    this.die = parseInt(formElement.typeOfDie.value);
-    this.rolls = parseInt(formElement.numberOfRolls.value);
-    this.modifier = formElement.modifier.value ? parseInt(formElement.modifier.value) : 0;
+    this.basicRoll.die = parseInt(formElement.typeOfDie.value);
+    this.basicRoll.rolls = parseInt(formElement.numberOfRolls.value);
+    this.basicRoll.modifier = formElement.modifier.value ? parseInt(formElement.modifier.value) : 0;
     this.typeOfRoll = formElement.typeOfRoll.value;
+
+    if(this.extraDiceCounters.length > 0) {
+        extraDiceCounters.forEach(counter => {
+            const extraDice = {
+                die: parseInt(formElement[`typeOfDie${counter}`].value),
+                rolls: parseInt(formElement[`numberOfRolls${counter}`].value),
+                modifier: formElement[`modifier${counter}`].value ? parseInt(formElement[`modifier${counter}`].value) : 0 
+            };
+            this.extraDiceValues.push(extraDice);
+        })
+    }
+}
+
+function getRollValues() {
+    const rolls = [];
+    
+    const basicRoll = this.performRoll(this.basicRoll);
+    let firstGroup = this.extraDiceValues.map(diceRow => {
+        return this.performRoll(diceRow);
+    });
+    firstGroup.unshift(basicRoll);
+    rolls.push(firstGroup);
+
+    if(this.typeOfRoll === 'advantage' || this.typeOfRoll === 'disadvantage') {
+        const basicRollTwo = this.performRoll(this.basicRoll);
+        let secondGroup = this.extraDiceValues.map(diceRow => {
+            return this.performRoll(diceRow);
+        });
+        secondGroup.unshift(basicRollTwo);
+        rolls.push(secondGroup);
+    }
+
+    return rolls;
 }
 
 
-function performRoll() {
+function performRoll(dice) {
     let results = [];
     let sum = 0;
-    for(let rollNumber = 0; rollNumber < this.rolls; rollNumber++) {
-        let result = this.rollSingleDice();
+    for(let rollNumber = 0; rollNumber < dice.rolls; rollNumber++) {
+        let result = this.rollSingleDice(dice);
         results.push(result);
         sum += result;
     }
-    sum += this.modifier;
+    sum += dice.modifier;
     console.log({results, sum});
-    return {results, sum};
+    return {...dice, results, sum};
 }
 
-function rollSingleDice() {
-    return Math.ceil(Math.random() * this.die);
+function rollSingleDice(dice) {
+    return Math.ceil(Math.random() * dice.die);
 }
 
-function printResults(rolls) {
+function printResults(rollGroups) {
     let sums = [];
     let lines = [];
-    rolls.forEach(roll => {
-        lines.push(`Rolling D${this.die}...`);
-        for(let result of roll.results) {
-            lines.push(`Rolled: ${result}`);
+    console.log({rollGroups});
+    try {
+        rollGroups.forEach(rolls => {
+            let groupSum = 0;
+            rolls.forEach(roll => {
+                lines.push(`Rolling D${roll.die}...`);
+                for(let result of roll.results) {
+                    lines.push(`Rolled: ${result}`);
+                }
+
+                if(roll.modifier) {
+                    lines.push(`Adding Modifier of ${roll.modifier}`);
+                }
+
+                groupSum += roll.sum;
+                lines.push('');
+            });
+            lines.push(`Total for this roll is: ${groupSum}`);
+            sums.push(groupSum);
+
+            lines.push('');
+            lines.push('');
+        });
+
+        if(this.typeOfRoll === 'advantage') {
+            sums = this.sortRolls(sums);
+            lines.push('Taking the highest roll');
+            lines.push(`Highest roll is: ${sums[0]}`);
+        } else if(this.typeOfRoll === 'disadvantage'){
+            sums = this.sortRolls(sums);
+            lines.push('Taking the lowest roll');
+            lines.push(`Lowest roll is: ${sums[1]}`);
         }
-
-        if(this.modifier) {
-            lines.push(`Adding Modifier of ${this.modifier}`);
-        }
-
-        lines.push(`Total for this roll is: ${roll.sum}`);
-        sums.push(roll.sum);
-
-        lines.push('');
-    });
-
-    if(this.typeOfRoll === 'advantage') {
-        sums = this.sortRolls(sums);
-        lines.push('Taking the highest roll');
-        lines.push(`Highest roll is: ${sums[0]}`);
-    } else if(this.typeOfRoll === 'disadvantage'){
-        sums = this.sortRolls(sums);
-        lines.push('Taking the lowest roll');
-        lines.push(`Lowest roll is: ${sums[1]}`);
+        
+        const text = lines.join("\n");
+        document.getElementById('roll-log').innerHTML = text;
+    } catch(error) {
+        console.log(error);
     }
-    
-    const text = lines.join("\n");
-    document.getElementById('roll-log').innerHTML = text;
 }
 
 
 function sortRolls(sums) {
     return sums.sort((a,b) => {
-        return a <= b;
+        return a > b;
     });
 }
 
+function resetForm() {
+    for(let index = this.extraDiceCounters.length-1; index >= 0; index--) {
+        const counter = this.extraDiceCounters[index];
+        this.removeDiceRow(counter)
+    };
+
+    this.counter = 0;
+    this.extraDiceCounters = [];
+    this.extraDiceValues = [];
+
+    this.typeOfRoll = 'regular';
+    this.basicRoll = {
+        die: 4,
+        rolls: 1,
+        modifier: 0
+    };
+
+}
 
 function addDiceRow(){
     try{
@@ -156,7 +222,6 @@ function addModifierInput() {
     let modifierInput = document.createElement('input');
     modifierInput.setAttribute('type', 'number');
     modifierInput.setAttribute('id', `modifier${this.counter}`);
-    modifierInput.setAttribute('required', "required");
 
 
     container.appendChild(modifierLabel);
@@ -185,6 +250,7 @@ function addNewElementContainer() {
 
 function removeDiceRow(counter) {
     const index = this.extraDiceCounters.findIndex(item => item === counter);
+    console.log({counter, index});
     this.extraDiceCounters.splice(index, 1);
 
     const rowToRemove = document.getElementById(`dice-row-${counter}`);
