@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>DnD Dice Roller</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="./dice-roller.css">
+    <link rel="stylesheet" type="text/css" href="../nav-bar.css">
 </head>
 <body>
+    <div class="main-nav" id="top-nav"></div>
     <h1>Dungeons & Dragons Dice Roller</h1>
     
     <form onsubmit="rollDice(this); return false">
@@ -70,5 +72,6 @@
         <textarea id="roll-log" rows="8" cols="50"></textarea>
     </div>
 </body>
-<script src="./index.js"></script>
+<script src="./dice-roller.js"></script>
+<script src="../nav-bar.js"></script>
 </html>

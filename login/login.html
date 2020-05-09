@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DnD Dice Roller</title>
+    <link rel="stylesheet" type="text/css" href="./login.css">
+    <link rel="stylesheet" type="text/css" href="../nav-bar.css">
+</head>
+<body>
+    <div class="main-nav" id="top-nav"></div>
+    
+    <div class="login-container">
+        <form onsubmit="login(this); return false;" class="flex-form">
+            <h3>Login To Your Account</h3>
+            
+            <label for="username">Username: </label>
+            <input type="text" id="username" required>
+            
+            <label for="password">Password: </label>
+            <input type="text" id="password" required>
+            
+            <input type="submit" value="Login" id="login-button">
+            
+            <p id="register-text">No account?  <a href="../registration/registration.html">Register</a></p>
+        </form>
+
+    </div>
+    
+    
+</body>
+<script src="./login.js"></script>
+<script src="../nav-bar.js"></script>
+</html>

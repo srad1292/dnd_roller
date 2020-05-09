@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DnD Dice Roller - Registration</title>
+    <link rel="stylesheet" type="text/css" href="./registration.css">
+    <link rel="stylesheet" type="text/css" href="../nav-bar.css">
+</head>
+<body>
+    <div class="main-nav" id="top-nav"></div>
+    
+    <div class="registration-container">
+        <form onsubmit="register(this); return false;" class="flex-form" autocomplete="off">
+            <h3>Register An Account</h3>
+            
+            <label for="username">Username: </label>
+            <input type="text" id="username" required>
+            
+            <label for="password">Password: </label>
+            <input type="password" id="password" onkeyup="passwordValidations()" required>
+
+            <div id="show-password-element">
+                <label for="showPassword">Show Password </label>
+                <input type="checkbox" id="showPassword" onclick="toggleShowPassword(this)">
+            </div>
+
+            <label for="passwordTwo">Confirm Password: </label>
+            <input type="password" id="passwordTwo" onkeyup="passwordValidations()" required>
+            <p class="custom-form-error" id="password-match-error">Passwords must match.</p>
+
+            
+            <input type="submit" value="Register" id="registration-button">
+        </form>
+
+    </div>
+    
+    
+</body>
+<script src="./registration.js"></script>
+<script src="../nav-bar.js"></script>
+</html>
