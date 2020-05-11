@@ -28,6 +28,8 @@ input {
     font-size: 0.75rem;
     margin-top: -1rem;
     margin-bottom: 0.75rem;
+
+    display: none;
 }
 
 #registration-button {
@@ -60,6 +62,3 @@ input {
     margin-top: -0.5rem;
 }
 
-#password-match-error {
-    display: none;
-}

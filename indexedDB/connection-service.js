@@ -17,32 +17,39 @@ let ConnectionService = {
             dbConnection.onupgradeneeded = (event) => {
                 let db = event.target.result;
                 LoggerService.log('log', 'ConnectionService::connectToDatabase -> Need to upgrade database');
-                ConnectionService._createDatabase(db)
+                let upgradeTransaction = event.target.transaction;
+
+                upgradeTransaction.oncomplete = () => {
+                    ConnectionService._createDatabase(db)
                     .then((createdDB) => {
                         LoggerService.log('log', 'ConnectionService::connectToDatabase -> Upgrade and connect successful');
                         resolve(createdDB);
                     })
                     .catch((error) => {
-                        LoggerService.log('error', `ConnectionService::connectToDatabase -> Upgrade failed: ${JSON.stringify(error)}`);
+                        LoggerService.log('log', `ConnectionService::connectToDatabase -> Upgrade failed with: `);
+                        LoggerService.log('error', error);
                         reject(error);
-                    });
+                    });    
+                }
+                
             }
 
             dbConnection.onerror = (error) => {
-                LoggerService.log('error', `ConnectionService::connectToDatabase -> Connection failed: ${JSON.stringify(error)}`);
+                LoggerService.log('log', `ConnectionService::connectToDatabase -> Connection failed with: `);
+                LoggerService.log('error', error);
                 reject(error);
             }        
         })
     },
-    _createDatabase(connection) {
+    _createDatabase(database) {
         LoggerService.log('log', 'ConnectionService::_createDatabase -> Creating database...');
         return new Promise((resolve, reject) => {
             try {
-                if (!connection.objectStoreNames.contains('user')) {
-                    let userObjectStore = upgradeDb.createObjectStore('user', {keyPath: 'user', autoIncrement: true});
+                if (!database.objectStoreNames.contains('user')) {
+                    let userObjectStore = database.createObjectStore('user', {keyPath: 'user', autoIncrement: true});
                     userObjectStore.createIndex('username', 'username', {unique: true});
                 }
-                resolve(connection);
+                resolve(database);
             } catch(error) {
                 reject(error);
             }

@@ -9,14 +9,24 @@ function register(formElement) {
         UserService.createUser(user)
             .then((data) => {
                 _setFormState("enable")
-                LoggerService.log("log", `registration::register -> Create user was successful for: ${JSON.stringify(user)}`);
+                LoggerService.log("log", `registration::register -> Create user was successful: ${JSON.stringify(data)}`);
+                
             })
             .catch((error) => {
                 _setFormState("enable")
-                LoggerService.log("error", `registration::register -> Creating user failed: ${JSON.stringify(user)} with: ${JSON.stringify(error)}`);
+                LoggerService.log("log", `registration::register -> Creating user failed: ${JSON.stringify(user)} with: `);
+                LoggerService.log("error", error);
+                
+                let usernameErrorElement = document.getElementById('username-error');
+                if( ((((error || {}).target || {}).error || {}).name || '') ===  'ConstraintError') {
+                    usernameErrorElement.style.display = 'block';
+                } else {
+                    usernameErrorElement.style.display = 'none';
+                }
             });
     } catch(error) {
-        LoggerService.log("error", `registration::register -> Catch -> Creating user failed: ${JSON.stringify(user)} with: ${JSON.stringify(error)}`);
+        LoggerService.log("log", `registration::register -> Catch -> Creating user failed: ${JSON.stringify(user)} with: `);
+        LoggerService.log("error", error);
     }
 }
 
